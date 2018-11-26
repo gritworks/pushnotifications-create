@@ -31,10 +31,6 @@ echo "** [log]: admin password is needed"
 # CREATE CSR FILE (certSigningRequest) and private key, -subj arguments
 # prevent prompted
 sudo openssl req -new -newkey rsa:2048 -nodes -keyout "$TEMP_FOLDER/$TEMP_KEY_NAME.key" -out "$TEMP_FOLDER/CSR.certSigningRequest" -subj /C=NL
-# chmod private ekey
-# NO? sudo chmod 640 $KEY_OUT
-# import private key in keychain
-# security import "$TEMP_FOLDER/$TEMP_KEY_NAME.key" -k ~/Library/Keychains/login.keychain
 
 
 # GO TO DEVELEOPER PORTAL AND CREATE CER FILE
@@ -56,18 +52,16 @@ done
 
 echo "** [log]: file [$APS_CER_NAME.cer] was found."
 
-# NO? echo "** [log]: export certificate to p12 format"
+# not sure if conversion for certificaye and key is needed -> pem -> p12 -> pem
+# needs furter testing to find out.
 
 # convert certificate (.cer) to .pem
 openssl x509 -in "$TEMP_FOLDER/$APS_CER_NAME.cer" -inform DER -outform PEM -out "$TEMP_FOLDER/$APS_CER_NAME.pem"
 echo "** [log]: cretificate converted to pem"
 
-
-
 # now convert certificate from pem to p12
 openssl pkcs12 -export -out "$TEMP_FOLDER/$APS_CER_NAME.p12" -nokeys -in "$TEMP_FOLDER/$APS_CER_NAME.pem" -password pass:$PASSWORD
 echo "** [log]: cretificate converted to p12"
-
 
 
 # convertcertificate back to pem to include attributes in file..
@@ -75,8 +69,7 @@ openssl pkcs12 -nokeys -out "$TEMP_FOLDER/$APS_CER_NAME.pem" -in "$TEMP_FOLDER/$
 echo "** [log]: cretificate converted to pem final"
 
 
-
-# key is already in pem format?? but has extension .key..
+# key is already in pem format?? but has extension .key.. convert to pem anyway
 openssl rsa -in "$TEMP_FOLDER/$TEMP_KEY_NAME.key" -out "$TEMP_FOLDER/$TEMP_KEY_NAME.pem" -outform PEM
 
 echo "** [log]: converting key to pem"

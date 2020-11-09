@@ -5,5 +5,5 @@
 - follow the procedure to create a .pem certificate with private key for ios without using the keychain app.
 - the shell script requires openssl to be installed on your machine.
 
-- PushNotification.class.php is used to send out notifications
+- PushNotification.class.php is used to send out notifications (http 2.0 protocol)
 - you need a device_token for both Android and iOS to send a message to a device
